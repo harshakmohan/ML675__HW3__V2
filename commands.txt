@@ -1,0 +1,10 @@
+Train 2-layer NN:
+
+python3 code/main.py train --data-dir data --log-file logs/ff-logs.csv --model-save models/ff.torch --model simple-nn
+
+Test 2-layer NN:
+
+Train CNN:
+
+Test CNN:
+
