@@ -15,7 +15,6 @@ class FeedForward(torch.nn.Module):
         self.layer2 = nn.Linear(hidden_dim, 10) #hidden_dim input features, 10 output features
         self.model = nn.Sequential(self.layer1, nn.ReLU(), self.layer2, nn.Softmax(dim=1))
 
-
     def forward(self, x):
         """
         Compute the forward pass of our model, which outputs logits.
