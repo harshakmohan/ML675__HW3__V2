@@ -6,6 +6,8 @@ __pycache__/
 .idea/*
 /data/*
 data/*
+main_old.py
+models_old.py
 # C extensions
 *.so
 
