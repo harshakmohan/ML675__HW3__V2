@@ -1,10 +1,12 @@
 Train 2-layer NN:
 
-python3 main.py train --data-dir data --log-file ff-logs.csv --model-save ff.torch --model simple-ff --train-steps 3500 --batch-size 100 --learning-rate 100
+python3 main.py train --data-dir data --log-file ff-logs.csv --model-save ff.torch --model simple-ff
 
 Test 2-layer NN:
 
 Train CNN:
+
+python3 main.py train --data-dir data --log-file simple-cnn-logs.csv --model-save simple-cnn.torch --model simple-cnn
 
 Test CNN:
 

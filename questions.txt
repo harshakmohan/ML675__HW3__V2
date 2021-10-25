@@ -1,0 +1,5 @@
+Are the pics in grayscale or color?
+What should the kernel size be of the 2d Max Pool layer?
+How do we determine the number of input channels and output channels for the convolutional layers?
+What should be the dimension of the SoftMax layer?
+

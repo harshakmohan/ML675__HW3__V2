@@ -24,10 +24,14 @@ class FeedForward(torch.nn.Module):
 class SimpleConvNN(torch.nn.Module):
     def __init__(self, n1_chan, n1_kern, n2_kern):
         super(SimpleConvNN, self).__init__()
-        self.simplecnn = None
+        self.conv1 = torch.nn.Conv2d(in_channels=1, out_channels=n1_chan, kernel_size=n1_kern)
+        self.conv2 = torch.nn.Conv2d(in_channels=n1_chan, out_channels=10, kernel_size=n2_kern, stride=2)
+        self.pooling = torch.nn.MaxPool2d(kernel_size=n2_kern)
+        self.simple_cnn = None
 
     def forward(self, x):
-        return x
+        self.simple_cnn = nn.Sequential(self.conv1, nn.ReLU(), self.conv2, self.pooling, nn.Softmax(dim=1))
+        return self.simple_cnn(x)
 
 class BestNN(torch.nn.Module):
     # take hyperparameters from the command line args!

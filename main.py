@@ -102,7 +102,9 @@ def train(args):
         # run the model and backprop for train steps
         i = np.random.choice(train_data.shape[0], size=args.batch_size, replace=False)
         x = torch.from_numpy(train_data[i].astype(np.float32))
+        print('train data x: \n', x.shape)
         y = torch.from_numpy(train_labels[i].astype(np.int))
+        print('train labels y: \n', y)
 
         # Forward pass: Get logits for x
         logits = model(x)
