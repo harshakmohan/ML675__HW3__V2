@@ -6,7 +6,7 @@ Test 2-layer NN:
 
 Train CNN:
 
-python3 main.py train --data-dir data --log-file simple-cnn-logs.csv --model-save simple-cnn.torch --model simple-cnn
+python3 main.py train --data-dir data --log-file simple-cnn-logs.csv --model-save simple-cnn.torch --model simple-cnn --batch-size 50
 
 Test CNN:
 

@@ -101,10 +101,17 @@ def train(args):
     for step in range(args.train_steps):
         # run the model and backprop for train steps
         i = np.random.choice(train_data.shape[0], size=args.batch_size, replace=False)
+        print('Type of image: ', type(train_data[i]))
         x = torch.from_numpy(train_data[i].astype(np.float32))
+        print('x before squeeze: \n', x.shape)
+        x = x.squeeze(dim=1)
+        print('x after squeeze: \n', x.shape)
+        x = x.reshape(x.shape[0], 1, 28, 28)
         print('train data x: \n', x.shape)
         y = torch.from_numpy(train_labels[i].astype(np.int))
-        print('train labels y: \n', y)
+        y = y.reshape(y.shape[0],1,1)
+        print('train labels y: \n', y.shape)
+        print('size of entire train_labels: \n', train_labels.shape)
 
         # Forward pass: Get logits for x
         logits = model(x)
