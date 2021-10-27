@@ -58,7 +58,6 @@ def train(args):
     #torch.manual_seed(RAND_SEED)
     #np.random.seed(RAND_SEED)
     #random.seed(42)
-
     # setup metric logging. It's important to log your loss!!
     log_f = open(args.log_file, 'w')
     fieldnames = ['step', 'train_loss', 'train_acc', 'dev_loss', 'dev_acc']
@@ -107,6 +106,7 @@ def train(args):
         x = x.squeeze(dim=1)
         print('x after squeeze: \n', x.shape)
         x = x.reshape(x.shape[0], 1, 28, 28)
+        # x = torch.reshape(x, (x.size()[0], 1, 28, 28))
         print('train data x: \n', x.shape)
         y = torch.from_numpy(train_labels[i].astype(np.int))
         y = y.reshape(y.shape[0],1,1)
