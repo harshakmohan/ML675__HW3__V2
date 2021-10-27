@@ -64,6 +64,7 @@ def train(args):
     logger = csv.DictWriter(log_f, fieldnames)
     logger.writeheader()
 
+
     # load data
     train_data, train_labels = load(args.data_dir, split="train")
     dev_data, dev_labels = load(args.data_dir, split="dev")
