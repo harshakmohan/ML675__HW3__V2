@@ -100,27 +100,41 @@ def train(args):
     for step in range(args.train_steps):
         # run the model and backprop for train steps
         i = np.random.choice(train_data.shape[0], size=args.batch_size, replace=False)
-        print('Type of image: ', type(train_data[i]))
         x = torch.from_numpy(train_data[i].astype(np.float32))
-        print('x before squeeze: \n', x.shape)
-        x = x.squeeze(dim=1)
-        print('x after squeeze: \n', x.shape)
-        x = x.reshape(x.shape[0], 1, 28, 28)
-        # x = torch.reshape(x, (x.size()[0], 1, 28, 28))
-        print('train data x: \n', x.shape)
         y = torch.from_numpy(train_labels[i].astype(np.int))
-        y = y.reshape(y.shape[0],1,1)
-        print('train labels y: \n', y.shape)
-        print('size of entire train_labels: \n', train_labels.shape)
 
         # Forward pass: Get logits for x
         logits = model(x)
         # Compute loss
-        loss = F.cross_entropy(logits, y)
+        loss = F.cross_entropy(logits.squeeze(), y)
         # Zero gradients, perform a backward pass, and update the weights.
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+    # for step in range(args.train_steps):
+    #     # run the model and backprop for train steps
+    #     i = np.random.choice(train_data.shape[0], size=args.batch_size, replace=False)
+    #     print('Type of image: ', type(train_data[i]))
+    #     x = torch.from_numpy(train_data[i].astype(np.float32))
+    #     print('x before squeeze: \n', x.shape)
+    #     x = x.squeeze(dim=1)
+    #     print('x after squeeze: \n', x.shape)
+    #     x = x.reshape(x.shape[0], 1, 28, 28)
+    #     # x = torch.reshape(x, (x.size()[0], 1, 28, 28))
+    #     print('train data x: \n', x.shape)
+    #     y = torch.from_numpy(train_labels[i].astype(np.int))
+    #     y = y.reshape(y.shape[0],1,1)
+    #     print('train labels y: \n', y.shape)
+    #     print('size of entire train_labels: \n', train_labels.shape)
+    #
+    #     # Forward pass: Get logits for x
+    #     logits = model(x)
+    #     # Compute loss
+    #     loss = F.cross_entropy(logits, y)
+    #     # Zero gradients, perform a backward pass, and update the weights.
+    #     optimizer.zero_grad()
+    #     loss.backward()
+    #     optimizer.step()
 
         # every 100 steps, log metrics
         if step % 100 == 0:
@@ -156,7 +170,7 @@ def approx_train_acc_and_loss(model, train_data, train_labels):
     x = torch.from_numpy(train_data[idxs].astype(np.float32))
     y = torch.from_numpy(train_labels[idxs].astype(np.int))
     logits = model(x)
-    loss = F.cross_entropy(logits, y)
+    loss = F.cross_entropy(logits.squeeze(), y)
     y_pred = torch.max(logits, 1)[1]
     return accuracy(train_labels[idxs], y_pred.numpy()), loss.item()
 
@@ -165,7 +179,7 @@ def dev_acc_and_loss(model, dev_data, dev_labels):
     x = torch.from_numpy(dev_data.astype(np.float32))
     y = torch.from_numpy(dev_labels.astype(np.int))
     logits = model(x)
-    loss = F.cross_entropy(logits, y)
+    loss = F.cross_entropy(logits.squeeze(), y)
     y_pred = torch.max(logits, 1)[1]
     return accuracy(dev_labels, y_pred.numpy()), loss.item()
 
