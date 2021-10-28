@@ -3,6 +3,7 @@ import csv
 import argparse as ap
 import random
 
+import pdb
 import torch
 import torch.nn.functional as F
 import numpy as np
@@ -77,7 +78,10 @@ def train(args):
     elif args.model.lower() == "simple-cnn":
         model = SimpleConvNN(args.cnn_n1_channels,
                             args.cnn_n1_kernel,
-                            args.cnn_n2_kernel).to(device)
+                            args.cnn_n2_kernel)
+        model.to(device)
+        print('model state: ', model.conv1.weight.device)
+
     elif args.model.lower() == "best":
         model = BestNN(args.best_n1_channels,
                        args.best_n1_kernel,
@@ -105,10 +109,13 @@ def train(args):
         i = np.random.choice(train_data.shape[0], size=args.batch_size, replace=False)
         x = torch.from_numpy(train_data[i].astype(np.float32)).to(device)
         y = torch.from_numpy(train_labels[i].astype(np.int)).to(device)
-
+        #print('x device: ', x.is_cuda)
         # Forward pass: Get logits for x
-        logits = model(x).cuda
+        logits = model(x).squeeze()
+        #print('logits type: ', logits.is_cuda)
+        #print('y type: ', y.is_cuda)
         # Compute loss
+        #pdb.set_trace()
         loss = F.cross_entropy(logits, y)
         # Zero gradients, perform a backward pass, and update the weights.
         optimizer.zero_grad()
@@ -146,21 +153,21 @@ def train(args):
 
 def approx_train_acc_and_loss(model, train_data, train_labels):
     idxs = np.random.choice(len(train_data), 4000, replace=False)
-    x = torch.from_numpy(train_data[idxs].astype(np.float32))
-    y = torch.from_numpy(train_labels[idxs].astype(np.int))
-    logits = model(x)
+    x = torch.from_numpy(train_data[idxs].astype(np.float32)).to('cuda:0')
+    y = torch.from_numpy(train_labels[idxs].astype(np.int)).to('cuda:0')
+    logits = model(x).squeeze()
     loss = F.cross_entropy(logits, y)
     y_pred = torch.max(logits, 1)[1]
-    return accuracy(train_labels[idxs], y_pred.numpy()), loss.item()
+    return accuracy(train_labels[idxs], y_pred.cpu().numpy()), loss.item()
 
 
 def dev_acc_and_loss(model, dev_data, dev_labels):
-    x = torch.from_numpy(dev_data.astype(np.float32))
-    y = torch.from_numpy(dev_labels.astype(np.int))
-    logits = model(x)
-    loss = F.cross_entropy(logits)
+    x = torch.from_numpy(dev_data.astype(np.float32)).to('cuda:0')
+    y = torch.from_numpy(dev_labels.astype(np.int)).to('cuda:0')
+    logits = model(x).squeeze()
+    loss = F.cross_entropy(logits, y)
     y_pred = torch.max(logits, 1)[1]
-    return accuracy(dev_labels, y_pred.numpy()), loss.item()
+    return accuracy(dev_labels, y_pred.cpu().numpy()), loss.item()
 
 
 def accuracy(y, y_hat):
