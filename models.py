@@ -26,7 +26,7 @@ class SimpleConvNN(torch.nn.Module):
         super(SimpleConvNN, self).__init__()
         self.conv1 = torch.nn.Conv2d(in_channels=1, out_channels=n1_chan, kernel_size=n1_kern, stride=1)
         self.conv2 = torch.nn.Conv2d(in_channels=n1_chan, out_channels=10, kernel_size=n2_kern, stride=2)
-        self.pooling = torch.nn.MaxPool2d(kernel_size=((28 - n1_kern) - n2_kern)//2 + 1)
+        self.pooling = torch.nn.MaxPool2d(kernel_size=((29 - n1_kern) - n2_kern)//2 + 1)
         self.simple_cnn = None
 
     def forward(self, x):
