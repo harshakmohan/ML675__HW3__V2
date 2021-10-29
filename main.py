@@ -40,17 +40,31 @@ def get_args():
     p.add_argument('--cnn-n2-kernel', type=int, default=5)
 
     # best hparams
-    p.add_argument('--best-n1-channels', type=int, default=80)
-    p.add_argument('--best-n1-kernel', type=int, default=5)
-    p.add_argument('--best-n2-channels', type=int, default=60)
-    p.add_argument('--best-n2-kernel', type=int, default=5)
+    p.add_argument('--best-n1-channels', type=int, default=32)
+    p.add_argument('--best-n1-kernel', type=int, default=3)
+    p.add_argument('--best-n2-channels', type=int, default=10)
+    p.add_argument('--best-n2-kernel', type=int, default=3)
     p.add_argument('--best-pool1', type=int, default=2)
     p.add_argument('--best-n3-channels', type=int, default=40)
     p.add_argument('--best-n3-kernel', type=int, default=3)
     p.add_argument('--best-n4-channels', type=int, default=20)
     p.add_argument('--best-n4-kernel', type=int, default=3)
-    p.add_argument('--best-pool2', type=int, default=3)
-    p.add_argument('--best-linear-features', type=int, default=80)
+    p.add_argument('--best-pool2', type=int, default=2)
+    p.add_argument('--best-linear-features1', type=int, default=600)
+    p.add_argument('--best-linear-features2', type=int, default=120)
+    p.add_argument('--best-dropout', type=float, default=0.25)
+
+    # p.add_argument('--best-n1-channels', type=int, default=80)
+    # p.add_argument('--best-n1-kernel', type=int, default=5)
+    # p.add_argument('--best-n2-channels', type=int, default=60)
+    # p.add_argument('--best-n2-kernel', type=int, default=5)
+    # p.add_argument('--best-pool1', type=int, default=2)
+    # p.add_argument('--best-n3-channels', type=int, default=40)
+    # p.add_argument('--best-n3-kernel', type=int, default=3)
+    # p.add_argument('--best-n4-channels', type=int, default=20)
+    # p.add_argument('--best-n4-kernel', type=int, default=3)
+    # p.add_argument('--best-pool2', type=int, default=3)
+    # p.add_argument('--best-linear-features', type=int, default=80)
     return p.parse_args()
 
 def train(args):
@@ -93,7 +107,9 @@ def train(args):
                        args.best_n4_channels,
                        args.best_n4_kernel,
                        args.best_pool2,
-                       args.best_linear_features)
+                       args.best_linear_features1,
+                       args.best_linear_features2,
+                       args.best_dropout).to(device)
     else:
         raise Exception("Unknown model type passed in!")
 
@@ -110,13 +126,15 @@ def train(args):
         x = torch.from_numpy(train_data[i].astype(np.float32)).to(device)
         y = torch.from_numpy(train_labels[i].astype(np.int)).to(device)
         #print('x device: ', x.is_cuda)
+
         # Forward pass: Get logits for x
-        logits = model(x).squeeze()
+        logits = model(x).squeeze() # removing .squeeze() for best neural network
         #print('logits type: ', logits.is_cuda)
-        #print('y type: ', y.is_cuda)
+        #print('y type: ', type(y))
+
         # Compute loss
         #pdb.set_trace()
-        loss = F.cross_entropy(logits, y)
+        loss = F.cross_entropy(logits, y.long())
         # Zero gradients, perform a backward pass, and update the weights.
         optimizer.zero_grad()
         loss.backward()
@@ -152,20 +170,22 @@ def train(args):
 
 
 def approx_train_acc_and_loss(model, train_data, train_labels):
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     idxs = np.random.choice(len(train_data), 4000, replace=False)
-    x = torch.from_numpy(train_data[idxs].astype(np.float32)).to('cuda:0')
-    y = torch.from_numpy(train_labels[idxs].astype(np.int)).to('cuda:0')
+    x = torch.from_numpy(train_data[idxs].astype(np.float32)).to(device)
+    y = torch.from_numpy(train_labels[idxs].astype(np.int)).to(device)
     logits = model(x).squeeze()
-    loss = F.cross_entropy(logits, y)
+    loss = F.cross_entropy(logits, y.long()) # changed from y to y.long() for best nn
     y_pred = torch.max(logits, 1)[1]
     return accuracy(train_labels[idxs], y_pred.cpu().numpy()), loss.item()
 
 
 def dev_acc_and_loss(model, dev_data, dev_labels):
-    x = torch.from_numpy(dev_data.astype(np.float32)).to('cuda:0')
-    y = torch.from_numpy(dev_labels.astype(np.int)).to('cuda:0')
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    x = torch.from_numpy(dev_data.astype(np.float32)).to(device)
+    y = torch.from_numpy(dev_labels.astype(np.int)).to(device)
     logits = model(x).squeeze()
-    loss = F.cross_entropy(logits, y)
+    loss = F.cross_entropy(logits, y.long()) # changed from y to y.long() for best nn
     y_pred = torch.max(logits, 1)[1]
     return accuracy(dev_labels, y_pred.cpu().numpy()), loss.item()
 

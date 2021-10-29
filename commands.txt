@@ -1,12 +1,21 @@
 Train 2-layer NN:
 
-python3 main.py train --data-dir data --log-file ff-logs.csv --model-save ff.torch --model simple-ff
+python3 main.py train --data-dir data --log-file logs/ff-logs.csv --model-save modelfiles/ff.torch --model simple-ff
 
 Test 2-layer NN:
 
 Train CNN:
 
-python3 main.py train --data-dir data --log-file simple-cnn-logs.csv --model-save simple-cnn.torch --model simple-cnn --batch-size 50
+python3 main.py train --data-dir data --log-file logs/simple-cnn-logs.csv --model-save modelfiles/simple-cnn.torch --model simple-cnn --batch-size 50
+python3 main.py train --data-dir data --log-file logs/simple-cnn-logs.csv --model-save modelfiles/simple-cnn.torch --model simple-cnn --batch-size 250
+
+# Reduce learning rate
+python3 main.py train --data-dir data --log-file logs/simple-cnn-logs.csv --model-save modelfiles/simple-cnn.torch --model simple-cnn --batch-size 250 --learning-rate 0.0005
+
 
 Test CNN:
+
+Train BNN:
+
+python3 main.py train --data-dir data --log-file best-nn-logs.csv --model-save best-nn.torch --model best --batch-size 100
 
