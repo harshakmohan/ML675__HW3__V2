@@ -55,10 +55,19 @@ class BestNN(torch.nn.Module):    # take hyperparameters from the command line a
         # self.fc3 = nn.Linear(in_features=linear_features2, out_features=10)
         # self.fc = nn.Sequential(self.fc1, self.fc2, self.fc3)
 
-        self.conv1 = torch.nn.Conv2d(in_channels=1, out_channels=n1_channels, kernel_size=n1_kernel, stride=1)
-        self.conv2 = torch.nn.Conv2d(in_channels=n1_channels, out_channels=10, kernel_size=n2_kernel, stride=2)
-        self.pooling = torch.nn.MaxPool2d(kernel_size=((29 - n1_kernel) - n2_kernel)//2 + 1)
-        self.bestnn = None
+        self.cnn_layers = nn.Sequential(
+            # Define layer 1
+            nn.Conv2d(in_channels=1, out_channels=4, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(4),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            # Define layer 2
+            nn.Conv2d(in_channels=4, out_channels=4, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(4),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),)
+
+        self.linear_layers = nn.Sequential(nn.Linear(4*7*7,10))
 
     def forward(self, x):
         # x = x.reshape(x.size()[0], 1, 28, 28)
@@ -68,6 +77,7 @@ class BestNN(torch.nn.Module):    # take hyperparameters from the command line a
         # return x
 
         x = x.reshape(x.size()[0], 1, 28, 28)
-        #print('x on cuda after? ', x.device)
-        self.bestnn = nn.Sequential(self.conv1, nn.ReLU(inplace=True), self.conv2, nn.ReLU(inplace=True), self.pooling, nn.Softmax(dim=1))
-        return self.bestnn(x)
+        x = self.cnn_layers(x)
+        x = x.view(x.size(0), -1)
+        x = self.linear_layers(x)
+        return x
