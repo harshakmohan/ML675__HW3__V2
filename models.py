@@ -33,7 +33,7 @@ class SimpleConvNN(torch.nn.Module):
         #print('x on cuda before? ', x.device)
         x = x.reshape(x.size()[0], 1, 28, 28)
         #print('x on cuda after? ', x.device)
-        self.simple_cnn = nn.Sequential(self.conv1, nn.ReLU(inplace=True), self.conv2, nn.ReLU(inplace=True), self.pooling, nn.Softmax(dim=1))
+        self.simple_cnn = nn.Sequential(self.conv1, nn.ReLU(inplace=True), self.conv2, nn.ReLU(inplace=True), self.pooling)
         return self.simple_cnn(x)
 
 class BestNN(torch.nn.Module):    # take hyperparameters from the command line args!

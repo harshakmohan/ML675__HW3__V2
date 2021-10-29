@@ -196,12 +196,13 @@ def accuracy(y, y_hat):
 
 def test(args):
     # You should not change this function at all
-    model = torch.load(args.model_save)
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # added this line
+    model = torch.load(args.model_save).to(device)  # modified this line
     test_data, _ = load(args.data_dir, split="test", load_labels=False)
 
     preds = []
     for test_ex in test_data:
-        x = torch.from_numpy(test_ex.astype(np.float32))
+        x = torch.from_numpy(test_ex.astype(np.float32)).to(device)  # modified this line
         # Make the x look like it's in a batch of size 1
         x = x.view(1, -1)
         model.eval()
