@@ -88,7 +88,7 @@ def train(args):
 
     # Build model
     if args.model.lower() == "simple-ff":
-        model = FeedForward(args.ff_hunits)
+        model = FeedForward(args.ff_hunits).to(device)
     elif args.model.lower() == "simple-cnn":
         model = SimpleConvNN(args.cnn_n1_channels,
                             args.cnn_n1_kernel,
