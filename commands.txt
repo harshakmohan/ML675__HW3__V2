@@ -4,6 +4,9 @@ python3 main.py train --data-dir data --log-file logs/ff-logs.csv --model-save m
 
 Test 2-layer NN:
 
+python3 main.py predict --data-dir data --log-file logs/ff-logs1.csv --model-save modelfiles/ff.torch1 --predictions-file preds/ff-preds.txt
+
+
 Train CNN:
 
 python3 main.py train --data-dir data --log-file logs/simple-cnn-logs.csv --model-save modelfiles/simple-cnn.torch --model simple-cnn --batch-size 50
