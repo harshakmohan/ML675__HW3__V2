@@ -28,7 +28,7 @@ def get_args():
     # hyperparameters
     p.add_argument("--model", type=str, default="simple-cnn")
     p.add_argument("--train-steps", type=int, default=3500) #orig default = 500, #best = 5000
-    p.add_argument("--batch-size", type=int, default=100) #orig default = 40, #best = 100
+    p.add_argument("--batch-size", type=int, default=200) #orig default = 40, #best = 100
     p.add_argument("--learning-rate", type=float, default=0.001) #orig default = 0.001, #best = 0.001
 
     # simple-ff hparams
@@ -40,9 +40,9 @@ def get_args():
     p.add_argument('--cnn-n2-kernel', type=int, default=5)
 
     # best hparams
-    p.add_argument('--best-n1-channels', type=int, default=32)
+    p.add_argument('--best-n1-channels', type=int, default=1)
     p.add_argument('--best-n1-kernel', type=int, default=3)
-    p.add_argument('--best-n2-channels', type=int, default=10)
+    p.add_argument('--best-n2-channels', type=int, default=4)
     p.add_argument('--best-n2-kernel', type=int, default=3)
     p.add_argument('--best-pool1', type=int, default=2)
     p.add_argument('--best-n3-channels', type=int, default=40)
@@ -52,7 +52,7 @@ def get_args():
     p.add_argument('--best-pool2', type=int, default=2)
     p.add_argument('--best-linear-features1', type=int, default=600)
     p.add_argument('--best-linear-features2', type=int, default=120)
-    p.add_argument('--best-dropout', type=float, default=0.25)
+    p.add_argument('--best-dropout', type=float, default=0.05)
 
     # p.add_argument('--best-n1-channels', type=int, default=80)
     # p.add_argument('--best-n1-kernel', type=int, default=5)

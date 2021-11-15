@@ -1,0 +1,71 @@
+Train 2-layer NN:
+
+python3 main.py train --data-dir data --log-file logs/ff-logs.csv --model-save modelfiles/ff.torch --model simple-ff
+
+Test 2-layer NN:
+
+python3 main.py predict --data-dir data --log-file logs/ff-logs1.csv --model-save modelfiles/ff.torch1 --predictions-file preds/ff-preds.txt
+
+
+Train CNN:
+
+python3 main.py train --data-dir data --log-file logs/simple-cnn-logs.csv --model-save modelfiles/simple-cnn.torch --model simple-cnn --batch-size 50
+python3 main.py train --data-dir data --log-file logs/simple-cnn-logs1.csv --model-save modelfiles/simple-cnn1.torch --model simple-cnn --batch-size 250
+
+# Reduce learning rate
+python3 main.py train --data-dir data --log-file logs/simple-cnn-logs.csv --model-save modelfiles/simple-cnn.torch --model simple-cnn --batch-size 250 --learning-rate 0.0005
+
+
+Test CNN:
+
+python3 main.py predict --data-dir data --log-file logs/simple-cnn-logs1.csv --model-save modelfiles/simple-cnn1.torch --predictions-file preds/simple-cnn-preds1.txt
+
+Train BNN:
+
+python3 main.py train --data-dir data --log-file logs/best-nn-logs2.csv --model-save modelfiles/best-nn.torch2 --model best --batch-size 200
+python3 main.py train --data-dir data --log-file logs/best-nn-logstest.csv --model-save modelfiles/best-nn_test.torch --model best --learning-rate 0.001 --batch-size 200 --
+
+Test BNN
+
+python3 main.py predict --data-dir data --log-file logs/best-logs.csv --model-save modelfiles/best.torch --predictions-file preds/best-predictions.txt
+
+
+
+FF Hyperparameter Sweep of Learning Rate:
+
+
+python3 main.py train --data-dir data --model simple-ff --log-file sweeplogs/ff-logs1.csv --model-save sweepmodelfiles/ff1.torch --learning-rate 0.000001
+python3 main.py train --data-dir data --model simple-ff --log-file sweeplogs/ff-logs2.csv --model-save sweepmodelfiles/ff2.torch --learning-rate 0.00001
+python3 main.py train --data-dir data --model simple-ff --log-file sweeplogs/ff-logs3.csv --model-save sweepmodelfiles/ff3.torch --learning-rate 0.0001
+python3 main.py train --data-dir data --model simple-ff --log-file sweeplogs/ff-logs4.csv --model-save sweepmodelfiles/ff4.torch --learning-rate 0.001
+python3 main.py train --data-dir data --model simple-ff --log-file sweeplogs/ff-logs5.csv --model-save sweepmodelfiles/ff5.torch --learning-rate 0.01
+python3 main.py train --data-dir data --model simple-ff --log-file sweeplogs/ff-logs6.csv --model-save sweepmodelfiles/ff6.torch --learning-rate 0.1
+python3 main.py train --data-dir data --model simple-ff --log-file sweeplogs/ff-logs7.csv --model-save sweepmodelfiles/ff7.torch --learning-rate 1
+
+Simple CNN Hyperparameter Sweep of Channel Numbers:
+
+
+python3 main.py train --data-dir data --model simple-cnn --log-file sweeplogs/simple-cnn-logs1.csv --model-save modelfiles/simple-cnn1.torch --batch-size 250 --cnn-n1-channels 10
+python3 main.py train --data-dir data --model simple-cnn --log-file sweeplogs/simple-cnn-logs2.csv --model-save modelfiles/simple-cnn2.torch --batch-size 250 --cnn-n1-channels 30
+python3 main.py train --data-dir data --model simple-cnn --log-file sweeplogs/simple-cnn-logs3.csv --model-save modelfiles/simple-cnn3.torch --batch-size 250 --cnn-n1-channels 50
+python3 main.py train --data-dir data --model simple-cnn --log-file sweeplogs/simple-cnn-logs4.csv --model-save modelfiles/simple-cnn4.torch --batch-size 250 --cnn-n1-channels 70
+python3 main.py train --data-dir data --model simple-cnn --log-file sweeplogs/simple-cnn-logs5.csv --model-save modelfiles/simple-cnn5.torch --batch-size 250 --cnn-n1-channels 90
+python3 main.py train --data-dir data --model simple-cnn --log-file sweeplogs/simple-cnn-logs6.csv --model-save modelfiles/simple-cnn6.torch --batch-size 250 --cnn-n1-channels 110
+python3 main.py train --data-dir data --model simple-cnn --log-file sweeplogs/simple-cnn-logs7.csv --model-save modelfiles/simple-cnn7.torch --batch-size 250 --cnn-n1-channels 130
+
+Best NN Hyperparameter Sweep of n2_channels:
+out channel of n2_channels, dropout values
+
+python3 main.py train --data-dir data --model best --log-file sweeplogs/best-nn-n2channels-logs1.csv --model-save sweepmodelfiles/best-nn1.torch --best-n2-channels 4
+python3 main.py train --data-dir data --model best --log-file sweeplogs/best-nn-n2channels-logs2.csv --model-save sweepmodelfiles/best-nn2.torch --best-n2-channels 16
+python3 main.py train --data-dir data --model best --log-file sweeplogs/best-nn-n2channels-logs3.csv --model-save sweepmodelfiles/best-nn3.torch --best-n2-channels 32
+python3 main.py train --data-dir data --model best --log-file sweeplogs/best-nn-n2channels-logs4.csv --model-save sweepmodelfiles/best-nn4.torch --best-n2-channels 64
+
+
+Best NN Hyperparameter Sweep of dropout:
+
+python3 main.py train --data-dir data --model best --log-file sweeplogs/best-nn-dropout-logs5.csv --model-save sweepmodelfiles/best-nn5.torch --best-dropout 0.05
+python3 main.py train --data-dir data --model best --log-file sweeplogs/best-nn-dropout-logs6.csv --model-save sweepmodelfiles/best-nn6.torch --best-dropout 0.1
+python3 main.py train --data-dir data --model best --log-file sweeplogs/best-nn-dropout-logs7.csv --model-save sweepmodelfiles/best-nn7.torch --best-dropout 0.25
+python3 main.py train --data-dir data --model best --log-file sweeplogs/best-nn-dropout-logs8.csv --model-save sweepmodelfiles/best-nn8.torch --best-dropout 0.5
+python3 main.py train --data-dir data --model best --log-file sweeplogs/best-nn-dropout-logs9.csv --model-save sweepmodelfiles/best-nn9.torch --best-dropout 1

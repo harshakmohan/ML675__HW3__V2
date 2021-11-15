@@ -40,42 +40,22 @@ class BestNN(torch.nn.Module):    # take hyperparameters from the command line a
     def __init__(self, n1_channels, n1_kernel, n2_channels, n2_kernel, pool1,
                  n3_channels, n3_kernel, n4_channels, n4_kernel, pool2, linear_features1, linear_features2, dropout):
         super(BestNN, self).__init__()
-        # self.conv1 = nn.Conv2d(in_channels=1, out_channels=n1_channels, kernel_size=n1_kernel)
-        # #self.bnorm1 = nn.BatchNorm2d(n1_channels)
-        # self.pool1 = nn.MaxPool2d(kernel_size=pool1, stride=pool1)
-        # self.layer1 = nn.Sequential(self.conv1, nn.ReLU(), self.pool1)
-        #
-        # self.conv2 = nn.Conv2d(in_channels=n1_channels, out_channels=n2_channels, kernel_size=n2_kernel)
-        # self.bnorm2 = nn.BatchNorm2d(n2_channels)
-        # self.pool2 = nn.MaxPool2d(kernel_size=pool2, stride=pool2)
-        # self.layer2 = nn.Sequential(self.conv2, nn.ReLU(), self.pool2)
-        #
-        # self.fc1 = nn.Linear(in_features=n2_channels, out_features=linear_features1)
-        # self.fc2 = nn.Linear(in_features=linear_features1, out_features=linear_features2)
-        # self.fc3 = nn.Linear(in_features=linear_features2, out_features=10)
-        # self.fc = nn.Sequential(self.fc1, self.fc2, self.fc3)
-
         self.cnn_layers = nn.Sequential(
             # Define layer 1
-            nn.Conv2d(in_channels=1, out_channels=4, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(4),
+            nn.Conv2d(in_channels=1, out_channels=n2_channels, kernel_size=2, stride=1, padding=1),
+            nn.BatchNorm2d(n2_channels),
+            nn.Dropout(dropout),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.MaxPool2d(kernel_size=3, stride=2),
             # Define layer 2
-            nn.Conv2d(in_channels=4, out_channels=4, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(in_channels=n2_channels, out_channels=4, kernel_size=2, stride=1, padding=1),
             nn.BatchNorm2d(4),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),)
+            nn.MaxPool2d(kernel_size=3, stride=2),)
 
         self.linear_layers = nn.Sequential(nn.Linear(4*7*7,10))
 
     def forward(self, x):
-        # x = x.reshape(x.size()[0], 1, 28, 28)
-        # x = self.layer1(x)
-        # x = self.layer2(x)
-        # x = self.fc3(self.fc2(self.fc1(x)))
-        # return x
-
         x = x.reshape(x.size()[0], 1, 28, 28)
         x = self.cnn_layers(x)
         x = x.view(x.size(0), -1)
